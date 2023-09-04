@@ -16,9 +16,6 @@ dependencies:
   graphlib:
     specifier: ^2.1.8
     version: 2.1.8
-  graphql:
-    specifier: ^16.8.0
-    version: 16.8.0
 
 devDependencies:
   '@graphql-codegen/cli':
@@ -54,6 +51,9 @@ devDependencies:
   eslint-plugin-simple-import-sort:
     specifier: ^10.0.0
     version: 10.0.0(eslint@8.48.0)
+  graphql:
+    specifier: ^16.8.0
+    version: 16.8.0
   jest:
     specifier: 29.6.4
     version: 29.6.4(@types/node@18.17.5)
