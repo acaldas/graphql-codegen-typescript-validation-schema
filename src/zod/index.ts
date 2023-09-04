@@ -229,12 +229,13 @@ const generateFieldTypeZodSchema = (
   type: TypeNode,
   parentType?: TypeNode
 ): string => {
+  const nullType = field.kind === 'InputValueDefinition' ? 'nullish' : 'nullable';
   if (isListType(type)) {
     const gen = generateFieldTypeZodSchema(config, visitor, field, type.type, type);
     if (!isNonNullType(parentType)) {
       const arrayGen = `z.array(${maybeLazy(type.type, gen)})`;
       const maybeLazyGen = applyDirectives(config, field, arrayGen);
-      return `${maybeLazyGen}.nullish()`;
+      return `${maybeLazyGen}.${nullType}()`;
     }
     return `z.array(${maybeLazy(type.type, gen)})`;
   }
@@ -245,7 +246,7 @@ const generateFieldTypeZodSchema = (
   if (isNamedType(type)) {
     const gen = generateNameNodeZodSchema(config, visitor, type.name);
     if (isListType(parentType)) {
-      return `${gen}.nullable()`;
+      return `${gen}.${nullType}()`;
     }
     const appliedDirectivesGen = applyDirectives(config, field, gen);
     if (isNonNullType(parentType)) {
@@ -255,9 +256,9 @@ const generateFieldTypeZodSchema = (
       return appliedDirectivesGen;
     }
     if (isListType(parentType)) {
-      return `${appliedDirectivesGen}.nullable()`;
+      return `${appliedDirectivesGen}.${nullType}()`;
     }
-    return `${appliedDirectivesGen}.nullish()`;
+    return `${appliedDirectivesGen}.${nullType}()`;
   }
   console.warn('unhandled type:', type);
   return '';
